@@ -29,8 +29,7 @@ OptionParser.new do |opts|
 		max_usage = m.to_i
 	end
 end.parse!
-	`echo "vim = RbVmomi::VIM.connect host: #{host}, user: #{user}, password: '#{password}', :insecure => true --- #{max_usage} #{target_name} #{datacenter_name}" > /tmp/file3`
-#begin
+begin
 	vim = RbVmomi::VIM.connect host: host, user: user, password: password, :insecure => true
 	dc = vim.serviceInstance.find_datacenter(datacenter_name)
 
@@ -64,9 +63,9 @@ end.parse!
 			$exitcode=2
 		end
 	end
-#rescue
-#	$status="UNKNOWN"
-#	$exitcode=3
-#end
+rescue
+	$status="UNKNOWN"
+	$exitcode=3
+end
 puts "Disk #{$status} - free space #{$free_space}/#{$capacity}; | free=#{$free_space}, capacity=#{$capacity}, used=#{(($capacity.to_f - $free_space.to_f)/$capacity.to_f)*100}"
 exit $exitcode
